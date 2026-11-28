@@ -88,6 +88,10 @@
       --rd-scrim: rgba(21, 23, 21, 0.38);
 
       --rd-e1-shadow: 0 1px 2px rgba(45, 36, 26, 0.04);
+      --rd-segment-track: #E2D9C9;
+      --rd-segment-track-shadow: inset 0 1.5px 3px rgba(62, 50, 35, 0.18), inset 0 0 0 0.75px rgba(92, 79, 63, 0.12), 0 0.75px 0 rgba(255, 253, 249, 0.90);
+      --rd-segment-thumb: #FFFDF9;
+      --rd-segment-thumb-shadow: 0 1.5px 3.5px rgba(45, 36, 26, 0.16), 0 0.5px 1px rgba(45, 36, 26, 0.10), inset 0 0.75px 0 rgba(255, 255, 255, 0.95);
       --rd-e2-shadow: 0 4px 16px rgba(38, 30, 20, 0.08), 0 1px 3px rgba(38, 30, 20, 0.04);
       --rd-e3-shadow: 0 10px 30px rgba(24, 20, 15, 0.14), 0 2px 8px rgba(24, 20, 15, 0.06);
       --rd-veil-bg: rgba(255, 252, 248, 0.88);
@@ -167,6 +171,10 @@
       --rd-scrim: rgba(0, 0, 0, 0.58);
 
       --rd-e1-shadow: 0 1px 2px rgba(0, 0, 0, 0.24);
+      --rd-segment-track: #0B0D0B;
+      --rd-segment-track-shadow: inset 0 1.5px 3.5px rgba(0, 0, 0, 0.72), inset 0 0 0 0.75px rgba(0, 0, 0, 0.50), 0 0.75px 0 rgba(236, 232, 224, 0.09);
+      --rd-segment-thumb: #282E29;
+      --rd-segment-thumb-shadow: 0 2px 5px rgba(0, 0, 0, 0.52), 0 0.5px 1px rgba(0, 0, 0, 0.35), inset 0 0.75px 0 rgba(236, 232, 224, 0.13);
       --rd-e2-shadow: 0 6px 20px rgba(0, 0, 0, 0.38), 0 1px 3px rgba(0, 0, 0, 0.25);
       --rd-e3-shadow: 0 14px 36px rgba(0, 0, 0, 0.52), 0 3px 10px rgba(0, 0, 0, 0.32);
       --rd-veil-bg: rgba(48, 52, 45, 0.90);
@@ -220,6 +228,40 @@
       background: var(--rd-glass-heavy);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
+    }
+    .rd-shelf-rail {
+      position: relative;
+      width: 66px;
+      height: 34px;
+      padding: 3px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      background: var(--rd-segment-track);
+      box-shadow: var(--rd-segment-track-shadow);
+    }
+    .rd-shelf-rail-thumb {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 30px;
+      height: 28px;
+      border-radius: 9999px;
+      background: var(--rd-segment-thumb);
+      box-shadow: var(--rd-segment-thumb-shadow);
+      pointer-events: none;
+      transition: transform 240ms cubic-bezier(0.22, 1.08, 0.36, 1);
+    }
+    .rd-shelf-rail-btn {
+      position: relative;
+      z-index: 1;
+      width: 30px;
+      height: 28px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .rd-scope .rd-source-top-bar {
       display: grid;
@@ -3922,7 +3964,7 @@
         changes: [
           '顶部搜索/更多/视图切换图标统一 1.75px 圆头描边，与底部胶囊同高（48vp）居中对齐。',
           '「继续阅读」卡去双层硬框线，改用 E1 极淡暖边 + 4vp 精致封面阴影 + 底部细进度条 + 主色胶囊「阅读」。',
-          '「封面 / 列表」切换改为连体分段胶囊；筛选触发按钮带深松绿激活小圆点。',
+          '「封面 / 列表」切换改为内嵌凹槽滑轨胶囊（深凹轨道 + 内陷阴影/底缘受光 + 抬升滑块投影）；筛选触发按钮带深松绿激活小圆点。',
           '「更多菜单」文案改主文字色 `text.primary` 并补齐顶部尖角气泡；单书 Sheet 用「统一底部抽屉头」规范。',
           '多选态采用实心深松绿勾选圆标，底部停靠渐变遮罩操作栏。'
         ]
@@ -4364,9 +4406,10 @@
       }
 
       const modeSwitch = `
-        <div class="h-[34px] p-[2px] rounded-full border box-border inline-flex items-center shrink-0" style="background:var(--rd-sunken);border-color:var(--rd-line);">
-          <button type="button" onclick="setShelfMode('cover')" class="w-[30px] h-7 rounded-full flex items-center justify-center rd-pressable" style="${state.shelfMode==='cover'?'background:var(--rd-surface);color:var(--rd-primary);box-shadow:var(--rd-e1-shadow);':'color:var(--rd-muted);'}">${icon('grid', 15)}</button>
-          <button type="button" onclick="setShelfMode('list')" class="w-[30px] h-7 rounded-full flex items-center justify-center rd-pressable" style="${state.shelfMode==='list'?'background:var(--rd-surface);color:var(--rd-primary);box-shadow:var(--rd-e1-shadow);':'color:var(--rd-muted);'}">${icon('list', 15)}</button>
+        <div class="rd-shelf-rail">
+          <span class="rd-shelf-rail-thumb" style="transform:translateX(${state.shelfMode==='cover'?0:30}px);"></span>
+          <button type="button" onclick="setShelfMode('cover')" class="rd-shelf-rail-btn rd-pressable" style="color:${state.shelfMode==='cover'?'var(--rd-primary)':'var(--rd-muted)'};">${icon('grid', 15)}</button>
+          <button type="button" onclick="setShelfMode('list')" class="rd-shelf-rail-btn rd-pressable" style="color:${state.shelfMode==='list'?'var(--rd-primary)':'var(--rd-muted)'};">${icon('list', 15)}</button>
         </div>
         <button type="button" onclick="toggleShelfFilter()" class="relative w-[34px] h-[34px] rounded-full border box-border shrink-0 inline-flex items-center justify-center rd-pressable" style="background:${state.shelfFilterOpen?'var(--rd-primary-soft)':'var(--rd-surface)'};border-color:${state.shelfFilterOpen?'var(--rd-primary-border)':'var(--rd-line)'};color:${state.shelfFilterOpen?'var(--rd-primary)':'var(--rd-ink)'};">
           ${icon('filter', 15)}

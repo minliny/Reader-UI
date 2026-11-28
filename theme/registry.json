@@ -140,15 +140,15 @@
     },
     "TOK_PAPER": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 1
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas",
@@ -156,15 +156,15 @@
     },
     "TOK_SURFACE": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 1
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas",
@@ -172,30 +172,30 @@
     },
     "TOK_CARD_BG": {
       "day": {
-        "r": 251,
-        "g": 248,
-        "b": 242,
+        "r": 249,
+        "g": 246,
+        "b": 240,
         "a": 1
       },
       "night": {
-        "r": 31,
-        "g": 35,
-        "b": 32,
+        "r": 27,
+        "g": 31,
+        "b": 28,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-surface"
     },
     "TOK_CARD_BG_HI": {
       "day": {
-        "r": 251,
-        "g": 248,
-        "b": 242,
+        "r": 249,
+        "g": 246,
+        "b": 240,
         "a": 1
       },
       "night": {
-        "r": 31,
-        "g": 35,
-        "b": 32,
+        "r": 27,
+        "g": 31,
+        "b": 28,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-surface",
@@ -203,15 +203,15 @@
     },
     "TOK_SURFACE_PANEL": {
       "day": {
-        "r": 253,
-        "g": 250,
-        "b": 244,
+        "r": 255,
+        "g": 255,
+        "b": 255,
         "a": 1
       },
       "night": {
-        "r": 34,
-        "g": 39,
-        "b": 35,
+        "r": 44,
+        "g": 50,
+        "b": 46,
         "a": 1
       },
       "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
@@ -389,33 +389,33 @@
     },
     "TOK_LINE": {
       "day": {
-        "r": 134,
-        "g": 122,
-        "b": 110,
-        "a": 0.58
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.1
       },
       "night": {
-        "r": 110,
-        "g": 129,
-        "b": 115,
-        "a": 0.6
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.09
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line"
     },
     "TOK_LINE_STRONG": {
       "day": {
-        "r": 134,
-        "g": 122,
-        "b": 110,
-        "a": 1
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.16
       },
       "night": {
-        "r": 110,
-        "g": 129,
-        "b": 115,
-        "a": 1
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.16
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong"
     },
     "TOK_LINE_HARD": {
       "day": {
@@ -696,18 +696,18 @@
     },
     "TOK_READ_SURFACE": {
       "day": {
-        "r": 240,
-        "g": 229,
-        "b": 214,
-        "a": 1
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 0.96
       },
       "night": {
-        "r": 37,
-        "g": 43,
-        "b": 38,
-        "a": 1
+        "r": 33,
+        "g": 38,
+        "b": 34,
+        "a": 0.96
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-shell"
     },
     "TOK_READ_ELEVATED": {
       "day": {
@@ -717,12 +717,12 @@
         "a": 1
       },
       "night": {
-        "r": 53,
-        "g": 63,
-        "b": 56,
+        "r": 39,
+        "g": 45,
+        "b": 40,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-card-solid"
     },
     "TOK_SS_WINDOW_BG": {
       "day": {
@@ -754,37 +754,6 @@
         "a": 0.12
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-strip-line"
-    },
-    "TOK_SS_MUTED": {
-      "day": {
-        "r": 146,
-        "g": 139,
-        "b": 128,
-        "a": 1
-      },
-      "night": {
-        "r": 116,
-        "g": 112,
-        "b": 103,
-        "a": 1
-      },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-subtle",
-      "sourceRole": "app.text.subtle"
-    },
-    "TOK_SS_FOOTER_TEXT": {
-      "day": {
-        "r": 200,
-        "g": 191,
-        "b": 181,
-        "a": 1
-      },
-      "night": {
-        "r": 200,
-        "g": 191,
-        "b": 181,
-        "a": 1
-      },
-      "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
     },
     "TOK_SS_CLOSE_BG": {
       "day": {
@@ -1185,15 +1154,15 @@
     },
     "app.window.background": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 1
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas"
@@ -1710,12 +1679,12 @@
         "a": 1
       },
       "night": {
-        "r": 192,
-        "g": 57,
-        "b": 43,
+        "r": 224,
+        "g": 100,
+        "b": 90,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG import_failure; same path and alpha, §2 App role mapping"
+      "provenance": "Existing monochrome/state SVG import_failure; night danger ink adaptation"
     },
     "app.icon.import_summary.C0392B": {
       "day": {
@@ -1725,12 +1694,12 @@
         "a": 1
       },
       "night": {
-        "r": 192,
-        "g": 57,
-        "b": 43,
+        "r": 224,
+        "g": 100,
+        "b": 90,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG import_summary; same path and alpha, §2 App role mapping"
+      "provenance": "Existing monochrome/state SVG import_summary; night danger ink adaptation"
     },
     "app.icon.search_clear.756F69": {
       "day": {
@@ -2151,18 +2120,18 @@
     },
     "app.icon.reader_auto_stop.8C3D36": {
       "day": {
-        "r": 140,
-        "g": 61,
-        "b": 54,
+        "r": 184,
+        "g": 59,
+        "b": 50,
         "a": 1
       },
       "night": {
-        "r": 140,
-        "g": 61,
-        "b": 54,
+        "r": 224,
+        "g": 100,
+        "b": 90,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG reader_auto_stop; same path and alpha, §2 App role mapping"
+      "provenance": "Paper & Pine 2.0 danger ink for reader_auto_stop; night contrast adaptation"
     },
     "app.icon.rc_list.2F6373": {
       "day": {
@@ -2921,18 +2890,18 @@
     },
     "app.icon.rss_edit.3F372F": {
       "day": {
-        "r": 63,
-        "g": 55,
-        "b": 47,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 234,
-        "g": 223,
-        "b": 206,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_edit; same path and alpha, §2 App role mapping"
+      "provenance": "Paper & Pine 2.0 primary pine ink for rules/edit row icon in day and night"
     },
     "app.icon.rss_add.2D4A3E": {
       "day": {
@@ -4079,19 +4048,19 @@
     },
     "app.icon.rc_autopage.332C25": {
       "day": {
-        "r": 51,
-        "g": 44,
-        "b": 37,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 236,
-        "g": 232,
-        "b": 224,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "墨纸青松 2.0 semantic palette; SVG authored paint identity, original geometry and opacity preserved",
-      "sourceRole": "TOK_READ_INK"
+      "provenance": "墨纸青松 2.0 semantic palette; aligned with TOK_GREEN control icons",
+      "sourceRole": "TOK_GREEN"
     },
     "app.icon.rc_replace.332C25": {
       "day": {
@@ -4455,15 +4424,15 @@
     },
     "TOK_DOWNLOAD_PAPER": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 1
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas",
@@ -4471,15 +4440,15 @@
     },
     "TOK_DOWNLOAD_SURFACE": {
       "day": {
-        "r": 251,
-        "g": 248,
-        "b": 242,
+        "r": 249,
+        "g": 246,
+        "b": 240,
         "a": 1
       },
       "night": {
-        "r": 31,
-        "g": 35,
-        "b": 32,
+        "r": 27,
+        "g": 31,
+        "b": 28,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-surface",
@@ -4996,15 +4965,15 @@
     },
     "app.navigation.floatingSurface": {
       "day": {
-        "r": 253,
-        "g": 250,
-        "b": 244,
+        "r": 255,
+        "g": 255,
+        "b": 255,
         "a": 1
       },
       "night": {
-        "r": 34,
-        "g": 39,
-        "b": 35,
+        "r": 44,
+        "g": 50,
+        "b": 46,
         "a": 1
       },
       "provenance": "HarmonyOS native surface audit: opaque paper and control paint",
@@ -5015,27 +4984,27 @@
         "r": 92,
         "g": 79,
         "b": 63,
-        "a": 0.12
+        "a": 0.18
       },
       "night": {
         "r": 236,
         "g": 232,
         "b": 224,
-        "a": 0.12
+        "a": 0.22
       },
       "provenance": "2026-11-24 Paper & Pine 2.0 floating navigation border"
     },
     "app.search.panelSurface": {
       "day": {
-        "r": 251,
-        "g": 248,
-        "b": 242,
+        "r": 249,
+        "g": 246,
+        "b": 240,
         "a": 1
       },
       "night": {
-        "r": 31,
-        "g": 35,
-        "b": 32,
+        "r": 27,
+        "g": 31,
+        "b": 28,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-surface",
@@ -5567,45 +5536,45 @@
     },
     "app.detail.footerFadeTransparent": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 0
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 0
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas"
     },
     "app.detail.footerFadeSoft": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 0.9607843137254902
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 0.9607843137254902
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas"
     },
     "app.detail.footerFadeSolid": {
       "day": {
-        "r": 244,
-        "g": 239,
-        "b": 230,
+        "r": 236,
+        "g": 229,
+        "b": 216,
         "a": 1
       },
       "night": {
-        "r": 21,
-        "g": 23,
-        "b": 21,
+        "r": 15,
+        "g": 17,
+        "b": 16,
         "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-canvas",
@@ -6443,18 +6412,18 @@
     },
     "app.feed.errorText": {
       "day": {
-        "r": 125,
-        "g": 47,
-        "b": 43,
+        "r": 184,
+        "g": 59,
+        "b": 50,
         "a": 1
       },
       "night": {
-        "r": 125,
-        "g": 47,
-        "b": 43,
+        "r": 224,
+        "g": 100,
+        "b": 90,
         "a": 1
       },
-      "provenance": "Current features/rss/RssPage.ets:errorSourceRow; approved READER_REPAIR_SPEC §2 consumer mapping; Night role adaptation; semantic role migration 2026-10-26, day/night values preserved"
+      "provenance": "Paper & Pine 2.0 danger ink for feed error text in day and night schemes"
     },
     "app.feed.unreadDot": {
       "day": {
@@ -6934,50 +6903,48 @@
     },
     "app.segment.surface": {
       "day": {
-        "r": 234,
-        "g": 227,
-        "b": 214,
+        "r": 226,
+        "g": 217,
+        "b": 201,
         "a": 1
       },
       "night": {
-        "r": 25,
-        "g": 28,
-        "b": 25,
+        "r": 11,
+        "g": 13,
+        "b": 11,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-sunken",
-      "sourceRole": "TOK_FIELD_SURFACE"
+      "provenance": "2026-11-28 recessed segmented rail groove surface (darker than canvas in both day and night), Paper & Pine 2.0, --rd-segment-track"
     },
     "app.segment.border": {
       "day": {
         "r": 92,
         "g": 79,
         "b": 63,
-        "a": 0.16
+        "a": 0.14
       },
       "night": {
-        "r": 236,
-        "g": 232,
-        "b": 224,
-        "a": 0.16
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.45
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_BORDER"
+      "provenance": "2026-11-28 recessed segmented rail groove rim border (warm soft wall in day, dark rim in night), Paper & Pine 2.0"
     },
     "app.segment.selected": {
       "day": {
-        "r": 251,
-        "g": 250,
-        "b": 246,
+        "r": 255,
+        "g": 253,
+        "b": 249,
         "a": 1
       },
       "night": {
-        "r": 68,
-        "g": 60,
-        "b": 52,
+        "r": 40,
+        "g": 46,
+        "b": 41,
         "a": 1
       },
-      "provenance": "Current features/common/ReaderSegmentedControl.ets:SEG_SELECTED_BG; READER_REPAIR_SPEC §2 approved App scope; preserve Day and alpha; Night semantic adaptation (authored success/error hue preserved); semantic role migration 2026-10-26, day/night values preserved"
+      "provenance": "2026-11-28 elevated segmented rail thumb surface, Paper & Pine 2.0, --rd-segment-thumb"
     },
     "app.segment.activeText": {
       "day": {
@@ -7329,15 +7296,15 @@
     },
     "app.detail.summaryFadeTransparent": {
       "day": {
-        "r": 251,
-        "g": 248,
-        "b": 242,
+        "r": 249,
+        "g": 246,
+        "b": 240,
         "a": 0
       },
       "night": {
-        "r": 31,
-        "g": 35,
-        "b": 32,
+        "r": 27,
+        "g": 31,
+        "b": 28,
         "a": 0
       },
       "provenance": "Book detail summary gradient, transparent endpoint matching TOK_CARD_BG"
@@ -7423,45 +7390,45 @@
     "app.header.veilSurface": {
       "day": {
         "r": 255,
-        "g": 252,
-        "b": 248,
-        "a": 0.88
+        "g": 255,
+        "b": 255,
+        "a": 0.92
       },
       "night": {
-        "r": 48,
-        "g": 52,
-        "b": 45,
-        "a": 0.9
+        "r": 44,
+        "g": 50,
+        "b": 46,
+        "a": 0.92
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-veil-bg"
     },
     "app.header.veilSurfaceScrolled": {
       "day": {
         "r": 255,
-        "g": 252,
-        "b": 248,
-        "a": 0.94
+        "g": 255,
+        "b": 255,
+        "a": 0.95
       },
       "night": {
-        "r": 48,
-        "g": 52,
-        "b": 45,
-        "a": 0.9
+        "r": 44,
+        "g": 50,
+        "b": 46,
+        "a": 0.94
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-veil-bg"
     },
     "app.header.veilBorder": {
       "day": {
-        "r": 198,
-        "g": 186,
-        "b": 164,
-        "a": 0.62
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.18
       },
       "night": {
-        "r": 108,
-        "g": 115,
-        "b": 100,
-        "a": 0.8
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.22
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-veil-border"
     },
@@ -8048,138 +8015,138 @@
     },
     "TOK_READ_CARD_EMPHASIS": {
       "day": {
-        "r": 249,
-        "g": 250,
+        "r": 237,
+        "g": 244,
         "b": 240,
         "a": 1
       },
       "night": {
-        "r": 60,
-        "g": 72,
-        "b": 64,
+        "r": 36,
+        "g": 48,
+        "b": 42,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, emphasis card surface"
     },
     "app.readerIsland.controlSurface": {
       "day": {
-        "r": 223,
-        "g": 211,
-        "b": 196,
+        "r": 255,
+        "g": 252,
+        "b": 248,
         "a": 1
       },
       "night": {
-        "r": 77,
-        "g": 92,
-        "b": 82,
+        "r": 39,
+        "g": 45,
+        "b": 40,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-card-solid"
     },
     "app.readerIsland.controlBorder": {
       "day": {
-        "r": 101,
-        "g": 84,
-        "b": 72,
-        "a": 1
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.16
       },
       "night": {
-        "r": 169,
-        "g": 189,
-        "b": 175,
-        "a": 1
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.16
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong"
     },
     "app.readerIsland.controlInk": {
       "day": {
-        "r": 48,
-        "g": 41,
-        "b": 31,
+        "r": 51,
+        "g": 44,
+        "b": 37,
         "a": 1
       },
       "night": {
-        "r": 243,
-        "g": 247,
-        "b": 238,
+        "r": 236,
+        "g": 232,
+        "b": 224,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-ink"
     },
     "app.readerIsland.controlDisabledSurface": {
       "day": {
-        "r": 243,
-        "g": 238,
-        "b": 231,
+        "r": 245,
+        "g": 239,
+        "b": 230,
         "a": 1
       },
       "night": {
-        "r": 48,
-        "g": 58,
-        "b": 51,
+        "r": 28,
+        "g": 32,
+        "b": 29,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-soft"
     },
     "app.readerIsland.controlDisabledBorder": {
       "day": {
-        "r": 184,
-        "g": 173,
-        "b": 160,
-        "a": 1
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.1
       },
       "night": {
-        "r": 89,
-        "g": 102,
-        "b": 93,
-        "a": 1
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.09
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line"
     },
     "app.readerIsland.controlDisabledInk": {
       "day": {
-        "r": 116,
-        "g": 106,
-        "b": 95,
+        "r": 110,
+        "g": 102,
+        "b": 92,
         "a": 1
       },
       "night": {
-        "r": 165,
-        "g": 173,
-        "b": 165,
+        "r": 166,
+        "g": 161,
+        "b": 150,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, disabled control ink"
     },
     "app.readerIsland.controlStopSurface": {
       "day": {
-        "r": 246,
-        "g": 230,
-        "b": 223,
+        "r": 250,
+        "g": 238,
+        "b": 234,
         "a": 1
       },
       "night": {
-        "r": 74,
-        "g": 56,
-        "b": 52,
+        "r": 58,
+        "g": 42,
+        "b": 40,
         "a": 1
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, stop control surface"
     },
     "app.readerIsland.controlStopBorder": {
       "day": {
-        "r": 186,
-        "g": 75,
-        "b": 64,
-        "a": 1
+        "r": 184,
+        "g": 59,
+        "b": 50,
+        "a": 0.35
       },
       "night": {
-        "r": 249,
-        "g": 144,
-        "b": 130,
-        "a": 1
+        "r": 224,
+        "g": 100,
+        "b": 90,
+        "a": 0.45
       },
-      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, stop control border"
     }
   },
   "reader": {
@@ -8774,624 +8741,6 @@
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, implementation plan §3.2",
       "displayName": "林夜"
-    }
-  },
-  "figmaVariables": {
-    "color/paper": {
-      "variableId": "VariableID:247:2",
-      "day": "#fff8f4ff",
-      "night": "#fff8f4ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/paper/bright": {
-      "variableId": "VariableID:247:3",
-      "day": "#fff8f1ff",
-      "night": "#fff8f1ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/surface": {
-      "variableId": "VariableID:247:4",
-      "day": "#ffffffe0",
-      "night": "#ffffffe0",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/surface/soft": {
-      "variableId": "VariableID:247:5",
-      "day": "#fffcf8b8",
-      "night": "#fffcf8b8",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/text/ink": {
-      "variableId": "VariableID:247:6",
-      "day": "#1f1b17ff",
-      "night": "#1f1b17ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/ink": {
-      "variableId": "VariableID:247:7",
-      "day": "#41484cff",
-      "night": "#41484cff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/text/muted": {
-      "variableId": "VariableID:247:8",
-      "day": "#756f69ff",
-      "night": "#756f69ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/border/default": {
-      "variableId": "VariableID:247:9",
-      "day": "#c1c7cdff",
-      "night": "#c1c7cdff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/action/primary": {
-      "variableId": "VariableID:247:10",
-      "day": "#2d4a3eff",
-      "night": "#2d4a3eff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/action/primary-dark": {
-      "variableId": "VariableID:247:11",
-      "day": "#1f3528ff",
-      "night": "#1f3528ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/accent": {
-      "variableId": "VariableID:247:12",
-      "day": "#f48b13ff",
-      "night": "#f48b13ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/navigation/bottom-bg": {
-      "variableId": "VariableID:247:13",
-      "day": "#fbf2ebff",
-      "night": "#fbf2ebff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/floating-bg": {
-      "variableId": "VariableID:247:14",
-      "day": "#fbf2ebff",
-      "night": "#fbf2ebff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/floating-bg-alt": {
-      "variableId": "VariableID:247:15",
-      "day": "#eae1daff",
-      "night": "#eae1daff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/meta/bg": {
-      "variableId": "VariableID:247:16",
-      "day": "#f5ece6ff",
-      "night": "#f5ece6ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/surface": {
-      "variableId": "VariableID:247:17",
-      "day": "#fff8efd1",
-      "night": "#fff8efd1",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/border/default": {
-      "variableId": "VariableID:247:18",
-      "day": "#c1c7cdff",
-      "night": "#c1c7cdff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/border/hover": {
-      "variableId": "VariableID:247:19",
-      "day": "#87928dff",
-      "night": "#87928dff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/border/focus": {
-      "variableId": "VariableID:247:20",
-      "day": "#2d4a3eff",
-      "night": "#2d4a3eff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/surface/disabled": {
-      "variableId": "VariableID:247:21",
-      "day": "#eae1da9e",
-      "night": "#eae1da9e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/text/disabled": {
-      "variableId": "VariableID:247:22",
-      "day": "#928b84ff",
-      "night": "#928b84ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/border/error": {
-      "variableId": "VariableID:247:23",
-      "day": "#d7473eff",
-      "night": "#d7473eff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/control/field/border/success": {
-      "variableId": "VariableID:247:24",
-      "day": "#338144ff",
-      "night": "#338144ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/paper": {
-      "variableId": "VariableID:256:2",
-      "day": "#fff8f4ff",
-      "night": "#24211eff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/paper/bright": {
-      "variableId": "VariableID:256:3",
-      "day": "#fff8f1ff",
-      "night": "#2c2824ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/paper/solid": {
-      "variableId": "VariableID:256:4",
-      "day": "#f8f4ecff",
-      "night": "#1c1a18ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface": {
-      "variableId": "VariableID:256:5",
-      "day": "#fffcf8e5",
-      "night": "#2a2622e5",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/ink": {
-      "variableId": "VariableID:256:6",
-      "day": "#1f1b17ff",
-      "night": "#eadfceff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/muted": {
-      "variableId": "VariableID:256:7",
-      "day": "#756f69ff",
-      "night": "#baad9cff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/border": {
-      "variableId": "VariableID:256:8",
-      "day": "#c1c7cdff",
-      "night": "#e2d1b933",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/primary": {
-      "variableId": "VariableID:256:9",
-      "day": "#2d4a3eff",
-      "night": "#d2bd96ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/primary/dark": {
-      "variableId": "VariableID:256:10",
-      "day": "#1f3528ff",
-      "night": "#7a684fff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/on/primary": {
-      "variableId": "VariableID:256:11",
-      "day": "#fffaf4ff",
-      "night": "#fffaf4ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/accent": {
-      "variableId": "VariableID:256:12",
-      "day": "#f48b13ff",
-      "night": "#d69b5fff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/forest": {
-      "variableId": "VariableID:256:13",
-      "day": "#367a4dff",
-      "night": "#367a4dff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/danger": {
-      "variableId": "VariableID:256:14",
-      "day": "#d62222ff",
-      "night": "#d62222ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/panel": {
-      "variableId": "VariableID:256:15",
-      "day": "#fffcf89e",
-      "night": "#fffcf89e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/panel/soft": {
-      "variableId": "VariableID:256:16",
-      "day": "#eee6dba3",
-      "night": "#eee6dba3",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/elevated": {
-      "variableId": "VariableID:256:17",
-      "day": "#ffffffc7",
-      "night": "#ffffffc7",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/solid": {
-      "variableId": "VariableID:256:18",
-      "day": "#fffcf8eb",
-      "night": "#fffcf8eb",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/translucent": {
-      "variableId": "VariableID:256:19",
-      "day": "#fffcf86b",
-      "night": "#fffcf86b",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/field": {
-      "variableId": "VariableID:256:20",
-      "day": "#fff8efc7",
-      "night": "#fff8efc7",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/surface/disabled": {
-      "variableId": "VariableID:256:21",
-      "day": "#eee6dbc2",
-      "night": "#eee6dbc2",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/line": {
-      "variableId": "VariableID:256:22",
-      "day": "#9b84662e",
-      "night": "#9b84662e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/line/strong": {
-      "variableId": "VariableID:256:23",
-      "day": "#b4a69757",
-      "night": "#b4a69757",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/line/hard": {
-      "variableId": "VariableID:256:24",
-      "day": "#beae9c66",
-      "night": "#beae9c66",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/primary/soft": {
-      "variableId": "VariableID:256:25",
-      "day": "#2d4a3e17",
-      "night": "#2d4a3e17",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/primary/bg": {
-      "variableId": "VariableID:256:26",
-      "day": "#2d4a3e1f",
-      "night": "#2d4a3e1f",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/primary/strong": {
-      "variableId": "VariableID:256:27",
-      "day": "#2d4a3e47",
-      "night": "#2d4a3e47",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/primary/border": {
-      "variableId": "VariableID:256:28",
-      "day": "#2d4a3e6b",
-      "night": "#2d4a3e6b",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/shadow/soft/warm": {
-      "variableId": "VariableID:256:29",
-      "day": "#5c47320d",
-      "night": "#5c47320d",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/runtime/shadow/dark": {
-      "variableId": "VariableID:256:30",
-      "day": "#0000001f",
-      "night": "#0000001f",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/library/inline-route-bg": {
-      "variableId": "VariableID:500:173",
-      "day": "#fffcf8a3",
-      "night": "#2a2622b8",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/library/source-action-bg": {
-      "variableId": "VariableID:500:174",
-      "day": "#2379a41a",
-      "night": "#2379a42e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/library/detail/divider": {
-      "variableId": "VariableID:500:175",
-      "day": "#b4a69747",
-      "night": "#e2d1b933",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/library/action-border": {
-      "variableId": "VariableID:500:176",
-      "day": "#b4a6976b",
-      "night": "#e2d1b947",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/library/action/on-primary": {
-      "variableId": "VariableID:500:177",
-      "day": "#ffffffff",
-      "night": "#ffffffff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/icon-bg": {
-      "variableId": "VariableID:518:2",
-      "day": "#2379a417",
-      "night": "#2379a429",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/row-divider": {
-      "variableId": "VariableID:518:3",
-      "day": "#b4a69738",
-      "night": "#e2d1b92e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/switch-off": {
-      "variableId": "VariableID:528:12",
-      "day": "#c1c7cdff",
-      "night": "#5c6065ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/switch-thumb": {
-      "variableId": "VariableID:528:13",
-      "day": "#ffffffe0",
-      "night": "#fffcf8e0",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/action-bg": {
-      "variableId": "VariableID:528:14",
-      "day": "#2379a41a",
-      "night": "#2379a42e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-good-bg": {
-      "variableId": "VariableID:528:15",
-      "day": "#2b895c21",
-      "night": "#2b895c38",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-good": {
-      "variableId": "VariableID:528:16",
-      "day": "#28704eff",
-      "night": "#54b080ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-warn-bg": {
-      "variableId": "VariableID:528:17",
-      "day": "#b0661d24",
-      "night": "#b0661d3b",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-warn": {
-      "variableId": "VariableID:528:18",
-      "day": "#8c521dff",
-      "night": "#dc9e53ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-info-bg": {
-      "variableId": "VariableID:528:19",
-      "day": "#2379a421",
-      "night": "#2379a438",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-info": {
-      "variableId": "VariableID:528:20",
-      "day": "#2d4a3eff",
-      "night": "#d2bd96ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-muted-bg": {
-      "variableId": "VariableID:545:171",
-      "day": "#8c82761f",
-      "night": "#8c827633",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/status-muted": {
-      "variableId": "VariableID:545:172",
-      "day": "#756f69ff",
-      "night": "#beb2a5ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-management/elevated-border": {
-      "variableId": "VariableID:545:173",
-      "day": "#b4a69761",
-      "night": "#e2d1b942",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/window": {
-      "variableId": "VariableID:566:35",
-      "day": "#fffcf8ff",
-      "night": "#221f1cfa",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/border": {
-      "variableId": "VariableID:566:36",
-      "day": "#9b84663d",
-      "night": "#e2d1b933",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/divider": {
-      "variableId": "VariableID:566:37",
-      "day": "#9b84662e",
-      "night": "#e2d1b929",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/selected": {
-      "variableId": "VariableID:566:38",
-      "day": "#2d4a3e14",
-      "night": "#86b49b1f",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/name": {
-      "variableId": "VariableID:566:39",
-      "day": "#2b241dff",
-      "night": "#e8ded1ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/chapter": {
-      "variableId": "VariableID:566:40",
-      "day": "#332c25ff",
-      "night": "#e1d6c9ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/muted": {
-      "variableId": "VariableID:566:41",
-      "day": "#8d8378ff",
-      "night": "#b9aea2ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/header-meta": {
-      "variableId": "VariableID:566:42",
-      "day": "#5b5046ff",
-      "night": "#c3b8adff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/source-switch/close-bg": {
-      "variableId": "VariableID:566:43",
-      "day": "#eee6db6b",
-      "night": "#554d4580",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/surface/top": {
-      "variableId": "VariableID:4104:3",
-      "day": "#faf7f2ff",
-      "night": "#faf7f2ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/surface/bottom": {
-      "variableId": "VariableID:4104:5",
-      "day": "#f5f0e8ff",
-      "night": "#f5f0e8ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/card": {
-      "variableId": "VariableID:4104:7",
-      "day": "#fffcf8ff",
-      "night": "#fffcf8ff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/chevron": {
-      "variableId": "VariableID:4104:9",
-      "day": "#b0a99fff",
-      "night": "#b0a99fff",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/trigger/surface": {
-      "variableId": "VariableID:4106:64743",
-      "day": "#2d4a3e0f",
-      "night": "#2d4a3e0f",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/selected/surface/phone": {
-      "variableId": "VariableID:4106:64745",
-      "day": "#2d4a3e0e",
-      "night": "#2d4a3e0e",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/selected/surface/tablet": {
-      "variableId": "VariableID:4106:64747",
-      "day": "#2d4a3e0f",
-      "night": "#2d4a3e0f",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
-    },
-    "color/settings/select/scrim": {
-      "variableId": "VariableID:4108:3",
-      "day": "#1f1b1752",
-      "night": "#1f1b1752",
-      "encoding": "RRGGBBAA",
-      "provenance": "Figma Reader App Color 245:3; Day245:1 Night254:0; live20260913"
     }
   }
 }

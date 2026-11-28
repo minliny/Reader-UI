@@ -3,8 +3,8 @@
   "harmonyCommit": "0f3b468dcf95c3869b7f28f47cf5019a7c26b8ef",
   "m1HarmonyCommit": "4acfefc1a71f62572f653cc9a5e79162a2d347f9",
   "designInputs": {
-    "theme/registry.json": "17339c9c8d876989575894e4a1f3c5a6b229cf72748d6398963c681820bda1df",
-    "theme/design-metrics.json": "aef9a0326a1730702c458ddb94e2746928e86fdc9676a64c90bec0aef5afb592",
+    "theme/registry.json": "a20a15a20d892c1e43e29fc340615b4d7c8fced53f91a387ea8c34d64eb7ada4",
+    "theme/design-metrics.json": "f6593b77aecc04dcca9bb7e28e4bd02ddca61ee963d2619a210fcd01f98cdc3b",
     "theme/icon-registry.json": "09bfc5ea8e27a07a636da6b689eb933f83e48e9e480b1f3812e4cbd9cffd0d53",
     "design/source-switch/source-switch.visual.json": "205de7f89121243e6ef4490f4863c6f4874e928a7eb5a66f52b41f0275c8d977",
     "theme/icons/reader_control_header_chevron.svg": "176f7ea3416d297cf7437ff30b40877e7dc54aeb0fe492153930cb29e2aa1caa",
@@ -40,11 +40,11 @@
     "reader_ebook_runtime/fixtures/generate-m1-window.py": "dad21aeb7fab6e4c83caaecbb3513a696084646319710b978a16fbe4eb631d78"
   },
   "generatedDesign": {
-    "theme/generated/android/ReaderThemeTokens.kt": "6f85cabc2ad5bec34121bb21f973f5619f3dc3f1c26db5b6a5aeebc72a75c3fb",
-    "theme/generated/ios/ReaderThemeTokens.swift": "af1ccbef824a3c422aad07e160b91bcbdb3c577aa1f1680a316ec000c537e75b",
-    "theme/generated/android/ReaderDesignMetrics.kt": "cbeb8ce17f57263786fd74e30276d6e1ecce8ae0b7214e1ed7de394b97e7a0dc",
+    "theme/generated/android/ReaderThemeTokens.kt": "e503873351a5fe1b88b10a76da833a78a564e0f853c8727444982a72b1f60de0",
+    "theme/generated/ios/ReaderThemeTokens.swift": "ca03d976cff0f7305f967b072ae6791087b86b8f96f47fcfb42fd728e371798d",
+    "theme/generated/android/ReaderDesignMetrics.kt": "80bdffe4c56e98105989192fb7b4aaba199f60c47bf814b191dc1242cc14181b",
     "theme/generated/android/ReaderIconRegistry.kt": "f9f8c1d7b1b88720ceb0f44a23c8ba42fefefef3fb5822647e1623372c2bf849",
-    "theme/generated/ios/ReaderDesignMetrics.swift": "b6fcd8cfa68d78aa61d5099e8f902d70613b25a6f7c974cabfb2c20852695175",
+    "theme/generated/ios/ReaderDesignMetrics.swift": "75e5779127957c5a6b221fa89923eb68b131d2250924010111aabde3cb199e36",
     "theme/generated/ios/ReaderIconRegistry.swift": "102c2a0bb201c673ecf6c23f5533221ddb2e2c68300ee257d745ca2bbe576321"
   },
   "productionResources": {

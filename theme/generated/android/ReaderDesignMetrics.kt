@@ -1,6 +1,6 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-m1-ui.mjs
-// Input: theme/design-metrics.json  aef9a0326a1730702c458ddb94e2746928e86fdc9676a64c90bec0aef5afb592
+// Input: theme/design-metrics.json  f6593b77aecc04dcca9bb7e28e4bd02ddca61ee963d2619a210fcd01f98cdc3b
 package com.reader.core.theme
 
 public enum class ReaderTypographyFamily { UI, LITERARY }
@@ -17,7 +17,7 @@ public object ReaderDesignMetrics {
     public const val inputRadius: Int = 10
     public const val segmentedTrackRadius: Int = 12
     public const val badgeRadius: Int = 6
-    public const val screenInset: Int = 19
+    public const val screenInset: Int = 16
     public const val spaceExtraSmall: Int = 8
     public const val spaceSmall: Int = 12
     public const val spaceMedium: Int = 16
